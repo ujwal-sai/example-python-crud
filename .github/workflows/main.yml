@@ -1,0 +1,32 @@
+name: Python CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: python-stage
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.2
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.2
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        
+    - name: Run server
+      run: |
+        source venv/bin/activate
+        uvicorn app.main:app --host localhost --port 8000 --reload
+
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        pytest -v
