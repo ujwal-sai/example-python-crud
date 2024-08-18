@@ -1,11 +1,12 @@
-name: Python CI
+name: Deploy Python Application
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
-  build:
-    runs-on: python-stage
-
+  deploy:
+    runs-on: ubuntu-latest
     steps:
     - name: Install AWS CLI
       id: install-aws-cli
@@ -32,7 +33,7 @@ jobs:
         python3.12 -m venv venv
         source venv/bin/activate
         pip3.12 install -r requirements.txt
-        
+		
     - name: Run server
       run: |
         source venv/bin/activate
@@ -43,7 +44,7 @@ jobs:
       run: |
         source venv/bin/activate
         pytest
-        
+		
     - name: Find and stop Uvicorn process
       run: |
         PID=$(ps aux | grep 'uvicorn app.main:app' | grep -v grep | awk '{print $2}')
@@ -52,19 +53,17 @@ jobs:
           echo "Stopped uvicorn process with PID $PID"
         else
           echo "No uvicorn process found"
-        
-    - name: Send SNS Notification on Failure
+		  
+    - name: Create Deploy Bundle
+        run: |
+          zip -r app.zip .
+          aws s3 cp app.zip s3://python-codedeploy/python/
+
+    - name: Deploy to CodeDeploy
       run: |
-        aws sns publish \
-          --topic-arn arn:aws:sns:eu-north-1:397118702283:git-notify \
-          --message 'Workflow failed: ${{ github.workflow_name }}' \
-          --subject 'Workflow Failure Notification'
-      if: failure()
-      
-    - name: Send SNS Notification on Failure
-      run: |
-        aws sns publish \
-          --topic-arn arn:aws:sns:eu-north-1:397118702283:git-notify \
-          --message 'Workflow success: ${{ github.workflow_name }}' \
-          --subject 'Workflow Success Notification'
-      if: success()
+        aws deploy deploy \
+          --application-name python \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name python-stage \
+          --s3-location bucket=python-codedeploy,key=python/app.zip \
+          --description "Deployment from GitHub Actions"
