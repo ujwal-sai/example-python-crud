@@ -47,4 +47,11 @@ jobs:
           --message 'Workflow failed: ${{ github.workflow_name }}' \
           --subject 'Workflow Failure Notification'
       if: failure()
-        
+      
+    - name: Send SNS Notification on Failure
+      run: |
+        aws sns publish \
+          --topic-arn arn:aws:sns:eu-north-1:397118702283:git-notify \
+          --message 'Workflow success: ${{ github.workflow_name }}' \
+          --subject 'Workflow Success Notification'
+      if: success()
