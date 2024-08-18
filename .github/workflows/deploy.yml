@@ -33,18 +33,16 @@ jobs:
         python3.12 -m venv venv
         source venv/bin/activate
         pip3.12 install -r requirements.txt
-		
     - name: Run server
       run: |
         source venv/bin/activate
         nohup uvicorn app.main:app --host localhost --port 8000 --reload > uvicorn.log 2>&1 &
         sleep 2
-
     - name: Run tests
       run: |
         source venv/bin/activate
         pytest
-		
+        
     - name: Find and stop Uvicorn process
       run: |
         PID=$(ps aux | grep 'uvicorn app.main:app' | grep -v grep | awk '{print $2}')
@@ -55,9 +53,9 @@ jobs:
           echo "No uvicorn process found"
 		  
     - name: Create Deploy Bundle
-        run: |
-          zip -r app.zip .
-          aws s3 cp app.zip s3://python-codedeploy/python/
+      run: |
+        zip -r app.zip .
+        aws s3 cp app.zip s3://python-codedeploy/python/
 
     - name: Deploy to CodeDeploy
       run: |
