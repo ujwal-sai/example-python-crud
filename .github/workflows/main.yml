@@ -47,12 +47,11 @@ jobs:
     - name: Find and stop Uvicorn process
       run: |
         PID=$(ps aux | grep 'uvicorn app.main:app' | grep -v grep | awk '{print $2}')
-        if [ -n "$PID" ]; then
+        if [ -n "${PID}" ]; then
           kill $PID
-          echo "Stopped uvicorn process with PID $PID"
+          echo "Stopped uvicorn process with PID ${PID}"
         else
           echo "No uvicorn process found"
-        
     - name: Send SNS Notification on Failure
       run: |
         aws sns publish \
