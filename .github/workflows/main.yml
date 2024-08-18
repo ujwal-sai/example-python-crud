@@ -24,7 +24,8 @@ jobs:
     - name: Run server
       run: |
         source venv/bin/activate
-        uvicorn app.main:app --host localhost --port 8000 --reload
+        nohup uvicorn app.main:app --host localhost --port 8000 --reload > uvicorn.log 2>&1 &
+        sleep 2
 
     - name: Run tests
       run: |
