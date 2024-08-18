@@ -7,7 +7,11 @@ jobs:
     runs-on: python-stage
 
     steps:
-
+    - name: Install AWS CLI
+      id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1
+      with:
+        version: 2 
     - name: Set up AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
