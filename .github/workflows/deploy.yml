@@ -3,7 +3,7 @@ name: Deploy Python Application
 on:
   push:
     branches:
-      - main
+      - pipeline
 
 jobs:
   deploy:
