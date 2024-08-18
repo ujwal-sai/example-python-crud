@@ -51,7 +51,6 @@ jobs:
           echo "Stopped uvicorn process with PID $PID"
         else
           echo "No uvicorn process found"
-		  
     - name: Create Deploy Bundle
       run: |
         zip -r app.zip .
