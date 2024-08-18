@@ -58,5 +58,5 @@ jobs:
           --application-name python \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name python-stage \
-          --s3-location bucket=python-codedeploy,key=python/app.zip \
+          --s3-location bucket=python-codedeploy,key=/python/app.zip,bundleType=zip \
           --description "Deployment from GitHub Actions"
