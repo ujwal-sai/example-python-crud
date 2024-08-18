@@ -7,6 +7,14 @@ jobs:
     runs-on: python-stage
 
     steps:
+
+    - name: Set up AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-north-1 
+          
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -30,5 +38,13 @@ jobs:
     - name: Run tests
       run: |
         source venv/bin/activate
-        pytest -v
+        pytest
+        
+    - name: Send SNS Notification on Failure
+      run: |
+        aws sns publish \
+          --topic-arn arn:aws:sns:eu-north-1:397118702283:git-notify \
+          --message 'Workflow failed: ${{ github.workflow_name }}' \
+          --subject 'Workflow Failure Notification'
+      if: failure()
         
