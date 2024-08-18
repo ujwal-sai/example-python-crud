@@ -54,7 +54,7 @@ jobs:
 
     - name: Deploy to CodeDeploy
       run: |
-        aws deploy deploy \
+        aws deploy create-deployment \
           --application-name python \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name python-stage \
