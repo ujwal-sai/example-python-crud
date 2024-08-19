@@ -1,9 +1,6 @@
 name: Deploy Python Application
 
-on:
-  push:
-    branches:
-      - pipeline
+on: [push]
 
 jobs:
   deploy:
@@ -58,5 +55,5 @@ jobs:
           --application-name python \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name python-stage \
-          --s3-location bucket=python-codedeploy,key=/python/app.zip,bundleType=zip \
+          --s3-location bucket=python-codedeploy,key=python/app.zip,bundleType=zip \
           --description "Deployment from GitHub Actions"
