@@ -1,6 +1,5 @@
 #!/bin/bash
-cd ..
-source venv/bin/activate
+cd .. && source venv/bin/activate
 PID=$(ps aux | grep 'uvicorn app.main:app' | grep -v grep | awk '{print $2}')
 if [ -n "$PID" ]; then
   kill $PID
