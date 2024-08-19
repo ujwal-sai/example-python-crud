@@ -8,12 +8,9 @@ hooks:
   AfterInstall:
     - location: buildscripts/appstop.sh
       timeout: 180
-      runas: ubuntu
   ApplicationStart:
     - location: buildscripts/appstart.sh
       timeout: 3600
-      runas: ubuntu
   ValidateService:
     - location: buildscripts/appcheck.sh
       timeout: 3600
-      runas: ubuntu
