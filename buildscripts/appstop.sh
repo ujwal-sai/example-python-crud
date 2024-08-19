@@ -5,4 +5,3 @@ if [ -n "$PID" ]; then
   echo "Stopped uvicorn process with PID $PID"
 else
   echo "No uvicorn process found"
-
