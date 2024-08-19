@@ -1,5 +1,4 @@
 #!/bin/bash
-source /home/ubuntu/venv/bin/activate
 PORT=8000
 DURATION=120
 END_TIME=$((SECONDS + DURATION))
