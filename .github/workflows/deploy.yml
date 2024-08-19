@@ -40,10 +40,12 @@ jobs:
       run: |
         source venv/bin/activate
         pytest
-        
     - name: Find and stop Uvicorn process
       run: |
         PID=$(ps aux | grep 'uvicorn app.main:app' | grep -v grep | awk '{print $2}'); [ -n "$PID" ] && kill $PID && echo "Stopped uvicorn process with PID $PID" || echo "No uvicorn process found"
+    - name: cleanup
+      run: |
+        sudo rm -rf venv
     - name: Create Deploy Bundle
       run: |
         zip -r app.zip .
