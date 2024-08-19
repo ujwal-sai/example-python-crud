@@ -4,8 +4,8 @@ DURATION=120
 END_TIME=$((SECONDS + DURATION))
 
 while [ $SECONDS -lt $END_TIME ]; do
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$PORT)
-    if [ $? -eq 0 ]; then
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${PORT}/api/users)
+    if [ $RESPONSE -eq 307 ]; then
         echo "Service is running."
         exit 0
     else
